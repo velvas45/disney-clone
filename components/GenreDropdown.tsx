@@ -1,3 +1,15 @@
+import { Genres } from "@/typing";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import Link from "next/link";
+import { ChevronDown } from "lucide-react";
+
 const GenreDropdown = async () => {
   const url = "https://api.themoviedb.org/3/genre/movie/list?language=en";
 
@@ -14,7 +26,24 @@ const GenreDropdown = async () => {
 
   const response = await fetch(url, options);
   const data = (await response.json()) as Genres;
-  return <div>GenreDropdown</div>;
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className="text-white flex justify-center items-center">
+        Genre <ChevronDown className="ml-1" />
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent>
+        {data.genres.map((genre) => (
+          <DropdownMenuItem key={genre.id}>
+            <Link href={`/genre/${genre.id}?genre=${genre.name}`}>
+              {genre.name}
+            </Link>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 };
 
 export default GenreDropdown;
